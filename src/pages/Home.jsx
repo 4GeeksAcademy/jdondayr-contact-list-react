@@ -39,6 +39,7 @@ export const Home = () => {
 				headers: { "Content-Type": "application/json" }
 			});
 			if (response.ok) {
+				console.log(idToDelete)
 				console.log("Contact deleted successfully")
 				getUserContacts()
 			}
@@ -49,14 +50,14 @@ export const Home = () => {
 	return (
 		<div className="container d-flex flex-column gap-3 mt-3">
 			<Link to="/demo" className="align-self-end">
-				<button className="btn btn-success">Add new contact</button>
+				<button onClick={()=>dispatch({type: "unset_edit_mode"})} className="btn btn-success">Add new contact</button>
 			</Link>
 			<h2 className="align-self-center" style={{display: (store.contacts.length === 0 ? "block" : "none")}}>There is no contacts on the list, please add one.</h2>
 			<ul className="list-group d-flex flex-column gap-2">
 				{/* Map over the 'todos' array from the store and render each item as a list element */}
 				{store && store.contacts?.map((contact, index) => {
 					return (
-						<li key={index} className="border p-2 d-flex align-items-center justify-content-between">
+						<li key={contact.id} className="border p-2 d-flex align-items-center justify-content-between">
 							<div className="info ms-5">
 								<h3><span><i className="fa-solid fa-user me-3"></i></span>{contact.name}</h3>
 								<h4><span><i className="fa-solid fa-location-dot me-3"></i></span>{contact.address}</h4>
@@ -64,13 +65,10 @@ export const Home = () => {
 								<h5><span><i className="fa-solid fa-envelope me-3"></i></span>{contact.email}</h5>
 							</div>
 							<div className="buttons d-flex flex-column me-5 gap-3">
-								<button onClick={()=>editContact(contact.id)} type="button" className="btn contact-list-button">Edit contact</button>
-								<Modal 
-								buttonLabel="Delete contact"
-								modalTitle="Think about it..."
-								modalBody="Do you really want to delete this contact?"
-								actionButton={<button onClick={() => deleteContact(contact.id)} type="button" data-bs-dismiss="modal" className="btn contact-list-button">Delete contact</button>}
-								/>
+								<Link to={"/demo"}>
+									<button onClick={()=>dispatch({type: "set_edit_contact", payload: contact})} type="button" className="btn contact-list-button">Edit contact</button>
+								</Link>
+								<button onClick={() => deleteContact(contact.id)} type="button" data-bs-dismiss="modal" className="btn contact-list-button">Delete contact</button>
 							</div>
 						</li>
 					);
