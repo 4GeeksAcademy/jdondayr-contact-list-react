@@ -39,7 +39,6 @@ export const Home = () => {
 				headers: { "Content-Type": "application/json" }
 			});
 			if (response.ok) {
-				console.log(idToDelete)
 				console.log("Contact deleted successfully")
 				getUserContacts()
 			}
